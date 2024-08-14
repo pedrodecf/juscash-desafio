@@ -3,6 +3,7 @@
 import Button from '@/app/components/UI/Button';
 import Input from '@/app/components/UI/Input';
 import PasswordInput from '@/app/components/UI/PasswordInput';
+import { useAuth } from '@/app/hooks/useAuth';
 import { SigninFormData, signinSchema } from '@/app/utils/signinValidation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
@@ -10,11 +11,13 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
 export default function Login() {
+  const { Login } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm<SigninFormData>({
     resolver: zodResolver(signinSchema)
   });
 
   const onSubmit = (data: SigninFormData) => {
+    Login(data);
   };
 
   return (

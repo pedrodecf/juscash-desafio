@@ -8,55 +8,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useAuth } from '@/app/hooks/useAuth';
 
 export default function Register() {
+  const { Register } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema)
   });
 
-  const onSubmit = (data: SignupFormData) => {
-    const users = JSON.parse(localStorage.getItem('@juscash:pedrodecf-users') || '[]');
-  
-    const userExists = users.some((user: SignupFormData) => user.email === data.email);
-  
-    if (userExists) {
-      toast('Este email já está cadastrado.', {
-        description: 'Por favor, use outro email.',
-        action: {
-          label: 'Fechar',
-          onClick: () => {}
-        },
-        classNames: {
-          toast: 'bg-white shadow-lg text-gray-800',
-          title: 'font-bold',
-          description: 'text-gray-500',
-        },
-        actionButtonStyle: { backgroundColor: '#22c55e' }
-      })
-    } else {
-      users.push(data);
-      localStorage.setItem('@juscash:pedrodecf-users', JSON.stringify(users));
-      toast('Conta criada com sucesso', {
-        description: 'Faça o login.',
-        action: {
-          label: 'Fechar',
-          onClick: () => {}
-        },
-        classNames: {
-          toast: 'bg-white shadow-lg text-gray-800',
-          title: 'font-bold',
-          description: 'text-gray-500',
-        },
-        actionButtonStyle: { backgroundColor: '#22c55e' }
-      })
-    }
+  const handleRegister = (data: SignupFormData) => {
+    Register(data);
   };
-  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md flex flex-col items-center gap-5">
+      <form onSubmit={handleSubmit(handleRegister)} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md flex flex-col items-center gap-5">
         <Image src="/logo.svg" alt="JusCash" width={200} height={50} className="mx-auto mb-5" priority/>
 
         <Input 
