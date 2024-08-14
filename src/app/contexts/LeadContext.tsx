@@ -1,0 +1,46 @@
+"use client"
+
+import { createContext, useState } from "react";
+import { LeadFormData } from "../utils/leadValidation";
+import { toast } from "sonner";
+
+interface LeadContextType {
+  leads: LeadFormData[];
+  RegisterLead: (data: LeadFormData) => void;
+}
+
+export const LeadContext = createContext<LeadContextType>({} as LeadContextType);
+
+interface LeadProviderProps {
+  children: React.ReactNode;
+}
+
+export function LeadProvider({ children }: LeadProviderProps) {
+  const [leadsData, setLeadsData] = useState<LeadFormData[]>([]);
+
+  function RegisterLead(data: LeadFormData) {
+    const leads = JSON.parse(localStorage.getItem('@juscash:pedrodecf-leads') || '[]');
+    const leadExists = leads.some((lead: LeadFormData) => lead.email === data.email);
+
+    if (leadExists) {
+      toast('Este email já está cadastrado', {
+        description: 'Por favor, use outro email',
+        action: { label: 'Fechar', onClick: () => {} }
+      })
+    } else {
+      leads.push(data);
+      localStorage.setItem('@juscash:pedrodecf-leads', JSON.stringify(leads));
+      setLeadsData([data]);
+      toast('Lead cadastrado com sucesso', {
+        description: 'Adicionado em Cliente Potencial',
+        action: { label: 'Fechar', onClick: () => {} }
+      })
+    }
+  }
+
+  return (
+    <LeadContext.Provider value={{ leads: leadsData, RegisterLead }}>
+      {children}
+    </LeadContext.Provider>
+  )
+}
