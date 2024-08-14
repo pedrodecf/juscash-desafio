@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm<SignupFormData>({
@@ -15,8 +16,43 @@ export default function Register() {
   });
 
   const onSubmit = (data: SignupFormData) => {
-    console.log(data);
+    const users = JSON.parse(localStorage.getItem('@juscash:pedrodecf-users') || '[]');
+  
+    const userExists = users.some((user: SignupFormData) => user.email === data.email);
+  
+    if (userExists) {
+      toast('Este email já está cadastrado.', {
+        description: 'Por favor, use outro email.',
+        action: {
+          label: 'Fechar',
+          onClick: () => {}
+        },
+        classNames: {
+          toast: 'bg-white shadow-lg text-gray-800',
+          title: 'font-bold',
+          description: 'text-gray-500',
+        },
+        actionButtonStyle: { backgroundColor: '#22c55e' }
+      })
+    } else {
+      users.push(data);
+      localStorage.setItem('@juscash:pedrodecf-users', JSON.stringify(users));
+      toast('Conta criada com sucesso', {
+        description: 'Faça o login.',
+        action: {
+          label: 'Fechar',
+          onClick: () => {}
+        },
+        classNames: {
+          toast: 'bg-white shadow-lg text-gray-800',
+          title: 'font-bold',
+          description: 'text-gray-500',
+        },
+        actionButtonStyle: { backgroundColor: '#22c55e' }
+      })
+    }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -52,7 +88,7 @@ export default function Register() {
           error={errors.confirmPassword?.message}
         />
         
-        <Link href="/login" className='w-full mb-3'>
+        <Link href="/login" className='w-full mb-1'>
           <p className='text-end text-xs text-blue-900 hover:underline '>
             Já possui uma conta? Fazer o login
           </p>

@@ -1,7 +1,16 @@
+"use client"
+
+import { toast } from "sonner"
+
 export default function Home() {
+
+  const open = () => {
+
+  }
+
   return (
     <>
-      <h1>Home</h1>
+      <button onClick={open}>open</button>
     </>
   )
 }

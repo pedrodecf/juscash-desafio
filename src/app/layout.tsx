@@ -1,22 +1,27 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./styles/globals.css";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './styles/globals.css'
+import { Toaster } from 'sonner'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "JusCash - Gerenciador de Leads",
-  description: "Um aplicativo de gerenciamento de leads que permite aos usuários organizar e acompanhar o status de seus leads, utilizando uma interface intuitiva e armazenamento local para persistência de dados.",
-};
+  title: 'JusCash - Gerenciador de Leads',
+  description:
+    'Um aplicativo de gerenciamento de leads que permite aos usuários organizar e acompanhar o status de seus leads, utilizando uma interface intuitiva e armazenamento local para persistência de dados.'
+}
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Toaster />
+      </body>
     </html>
-  );
+  )
 }
