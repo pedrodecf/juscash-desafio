@@ -1,12 +1,13 @@
 "use client"
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { LeadFormData } from "../utils/leadValidation";
 import { toast } from "sonner";
 
 interface LeadContextType {
   leads: LeadFormData[];
   RegisterLead: (data: LeadFormData) => void;
+  updateLeads: (updatedLeads: LeadFormData[]) => void;
 }
 
 export const LeadContext = createContext<LeadContextType>({} as LeadContextType);
@@ -18,6 +19,11 @@ interface LeadProviderProps {
 export function LeadProvider({ children }: LeadProviderProps) {
   const [leadsData, setLeadsData] = useState<LeadFormData[]>([]);
 
+  useEffect(() => {
+    const storedLeads = JSON.parse(localStorage.getItem('@juscash:pedrodecf-leads') || '[]');
+    setLeadsData(storedLeads);
+  }, []);
+
   function RegisterLead(data: LeadFormData) {
     const leads = JSON.parse(localStorage.getItem('@juscash:pedrodecf-leads') || '[]');
     const leadExists = leads.some((lead: LeadFormData) => lead.email === data.email);
@@ -26,21 +32,26 @@ export function LeadProvider({ children }: LeadProviderProps) {
       toast('Este email já está cadastrado', {
         description: 'Por favor, use outro email',
         action: { label: 'Fechar', onClick: () => {} }
-      })
+      });
     } else {
       leads.push(data);
       localStorage.setItem('@juscash:pedrodecf-leads', JSON.stringify(leads));
-      setLeadsData([data]);
+      setLeadsData([...leadsData, data]);
       toast('Lead cadastrado com sucesso', {
         description: 'Adicionado em Cliente Potencial',
         action: { label: 'Fechar', onClick: () => {} }
-      })
+      });
     }
   }
 
+  function updateLeads(updatedLeads: LeadFormData[]) {
+    setLeadsData(updatedLeads);
+    localStorage.setItem('@juscash:pedrodecf-leads', JSON.stringify(updatedLeads));
+  }
+
   return (
-    <LeadContext.Provider value={{ leads: leadsData, RegisterLead }}>
+    <LeadContext.Provider value={{ leads: leadsData, RegisterLead, updateLeads }}>
       {children}
     </LeadContext.Provider>
-  )
+  );
 }
