@@ -1,8 +1,8 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import DroppableColumn from './DroppableColumn';
 import { LeadFormData } from '../utils/leadValidation';
 import { toast } from 'sonner';
 import { useLead } from '../hooks/useLead';
+import DroppableColumn from './DroppableColumn';
 
 type LeadColumn = 'cliente_potencial' | 'dados_confirmados' | 'analise_de_lead';
 
@@ -28,30 +28,30 @@ export default function LeadTable() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id) {
-      const fromColumn = findColumnByLead(String(active.id));
-      const toColumn = over.id as LeadColumn;
+    if (!over || active.id === over.id) return;
 
-      if (fromColumn && fromColumn !== toColumn) {
-        if (isValidMove(fromColumn, toColumn)) {
-          const updatedLeads = leads.map((lead: LeadFormData) => {
-            if (lead.email === String(active.id)) {
-              return { ...lead, type: toColumn };
-            }
-            return lead;
-          });
+    const fromColumn = findColumnByLead(String(active.id));
+    const toColumn = over.id as LeadColumn;
 
-          updateLeads(updatedLeads);
-          toast('Movimentação Concluída', {
-            description: "Lead movimentado para a etapa selecionada",
-            action: { label: 'Fechar', onClick: () => {} }
-          });
-        } else {
-          toast('Movimentação Inválida', {
-            description: 'Você não pode mover o lead para esta etapa',
-            action: { label: 'Fechar', onClick: () => {} }
-          });
-        }
+    if (fromColumn && fromColumn !== toColumn) {
+      if (isValidMove(fromColumn, toColumn)) {
+        const updatedLeads = leads.map((lead: LeadFormData) => {
+          if (lead.email === String(active.id)) {
+            return { ...lead, type: toColumn };
+          }
+          return lead;
+        });
+
+        updateLeads(updatedLeads);
+        toast('Movimentação Concluída', {
+          description: "Lead movimentado para a etapa selecionada",
+          action: { label: 'Fechar', onClick: () => {} }
+        });
+      } else {
+        toast('Movimentação Inválida', {
+          description: 'Você não pode mover o lead para esta etapa',
+          action: { label: 'Fechar', onClick: () => {} }
+        });
       }
     }
   };
