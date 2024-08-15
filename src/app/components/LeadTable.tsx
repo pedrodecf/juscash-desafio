@@ -1,4 +1,4 @@
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { LeadFormData } from '../utils/leadValidation';
 import { toast } from 'sonner';
 import { useLead } from '../hooks/useLead';
@@ -14,6 +14,14 @@ const columns: { id: LeadColumn; title: string }[] = [
 
 export default function LeadTable() {
   const { leads, updateLeads } = useLead();
+
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+
+  const sensors = useSensors(pointerSensor);
 
   const groupedLeads: Record<LeadColumn, LeadFormData[]> = {
     cliente_potencial: [],
@@ -71,7 +79,7 @@ export default function LeadTable() {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div className="grid grid-cols-3">
         {columns.map((column) => (
           <DroppableColumn key={column.id} id={column.id} title={column.title} leads={groupedLeads[column.id]} />
