@@ -6,9 +6,9 @@
   - [x] Garantir que a senha e sua confirmação sejam iguais.
   - [x] Permitir visualização da senha e sua confirmação ao clicar em um ícone.
 
-- [ ] **Login de Usuário:**
+- [x] **Login de Usuário:**
   - [x] Criar uma tela de login para os usuários.
-  - [ ] Após o login, redirecionar o usuário para a próxima tela de gerenciamento de leads.
+  - [x] Após o login, redirecionar o usuário para a próxima tela de gerenciamento de leads.
 
 - [x] **Gerenciamento de Leads:**
   - [x] Implementar uma tabela para exibição dos leads, organizados por status: "Cliente Potencial", "Dados Confirmados", e "Análise do Lead".
@@ -20,8 +20,8 @@
   - [x] Implementar campos obrigatórios no formulário de novo lead, como nome do cliente e oportunidades.
   - [x] Exibir uma mensagem de confirmação ao salvar um novo lead.
 
-- [ ] **Modal de Edição de Leads:**
-  - [ ] Permitir que, ao clicar no nome de um lead, a modal "Novo Lead" seja reaberta com as informações preenchidas e desabilitadas, com o título "Lead".
+- [x] **Modal de Edição de Leads:**
+  - [x] Permitir que, ao clicar no nome de um lead, a modal "Novo Lead" seja reaberta com as informações preenchidas e desabilitadas, com o título "Lead".
 
 ### Regras de Negócios
 

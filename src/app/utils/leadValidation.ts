@@ -18,7 +18,10 @@ export const leadSchema = z.object({
     credito_do_autor: z.boolean()
   }),
 
-  type: z.enum(["cliente_potencial", "dados_confirmados", "analise_de_lead"]).default("cliente_potencial")
+  type: z.enum(["cliente_potencial", "dados_confirmados", "analise_de_lead"]).default("cliente_potencial"),
+
+  created_by: z.string().email().optional(),
+  created_at: z.string().optional(),
 });
 
 export type LeadFormData = z.infer<typeof leadSchema>;

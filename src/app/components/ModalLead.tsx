@@ -42,8 +42,8 @@ export default function ModalLead({ onClose }: ModalLeadProps) {
   };
 
   const handleRegisterLead = (data: LeadFormData) => {
-    RegisterLead(data);
-    onClose();
+    const wasRegistered = RegisterLead(data);
+    if (wasRegistered) onClose();
   }
 
   return (

@@ -9,15 +9,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const { Login } = useAuth();
+  const router = useRouter();
+
   const { register, handleSubmit, formState: { errors } } = useForm<SigninFormData>({
     resolver: zodResolver(signinSchema)
   });
 
   const onSubmit = (data: SigninFormData) => {
-    Login(data);
+    const logged = Login(data);
+    if (logged) router.push('/')
   };
 
   return (

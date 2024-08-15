@@ -3,21 +3,25 @@
 import Button from '@/app/components/UI/Button';
 import Input from '@/app/components/UI/Input';
 import PasswordInput from '@/app/components/UI/PasswordInput';
+import { useAuth } from '@/app/hooks/useAuth';
 import { SignupFormData, signupSchema } from '@/app/utils/signupValidation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '@/app/hooks/useAuth';
 
 export default function Register() {
   const { Register } = useAuth();
+  const router = useRouter();
+  
   const { register, handleSubmit, formState: { errors } } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema)
   });
 
   const handleRegister = (data: SignupFormData) => {
-    Register(data);
+    const wasRegistered = Register(data);
+    if (wasRegistered) router.push('/login')
   };
 
   return (
