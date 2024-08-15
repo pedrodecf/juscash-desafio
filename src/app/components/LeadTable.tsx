@@ -42,9 +42,13 @@ export default function LeadTable() {
           });
 
           updateLeads(updatedLeads);
+          toast('Movimentação Concluída', {
+            description: "Lead movimentado para a etapa selecionada",
+            action: { label: 'Fechar', onClick: () => {} }
+          });
         } else {
           toast('Movimentação Inválida', {
-            description: 'Você não pode mover o lead para esta etapa.',
+            description: 'Você não pode mover o lead para esta etapa',
             action: { label: 'Fechar', onClick: () => {} }
           });
         }
@@ -68,7 +72,7 @@ export default function LeadTable() {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3">
         {columns.map((column) => (
           <DroppableColumn key={column.id} id={column.id} title={column.title} leads={groupedLeads[column.id]} />
         ))}

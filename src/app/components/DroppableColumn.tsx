@@ -16,9 +16,9 @@ export default function DroppableColumn({ id, title, leads }: DroppableColumnPro
   };
 
   return (
-    <div ref={setNodeRef} className="border p-4 rounded bg-gray-50">
-      <h3 className="font-bold text-gray-800 text-center">{title}</h3>
-      <div className="mt-2 space-y-2">
+    <div ref={setNodeRef} className="border py-4 bg-gray-50">
+      <h3 className="font-bold text-gray-800 text-center border-b-2 pb-3">{title}</h3>
+      <div>
         {leads.map((lead) => (
           <DraggableLead
             key={lead.email}

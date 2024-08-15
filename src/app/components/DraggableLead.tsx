@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import * as I from 'react-icons/ai'
 
 interface DraggableLeadProps {
   id: string;
@@ -21,11 +22,11 @@ export default function DraggableLead({ id, text, onClick }: DraggableLeadProps)
       {...listeners}
       {...attributes}
       onClick={onClick}
-      className={`p-4 bg-white border rounded shadow-md text-gray-800 text-sm cursor-pointer hover:bg-gray-100 ${
+      className={`p-4 m-4 bg-gray-100 text-gray-800 text-sm cursor-pointer rounded transition-colors text-left hover:bg-gray-200 ${
         isDragging ? 'cursor-grabbing' : ''
       }`}
-    >
-      {text}
+    > 
+        {text}
     </div>
   );
 }

@@ -6,7 +6,11 @@ import Button from "./UI/Button";
 import Checkbox from "./UI/Checkbox";
 import Input from "./UI/Input";
 
-export default function ModalLead() {
+interface ModalLeadProps {
+  onClose: () => void
+}
+
+export default function ModalLead({ onClose }: ModalLeadProps) {
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<LeadFormData>({
     resolver: zodResolver(leadSchema),
     defaultValues: {
@@ -19,11 +23,11 @@ export default function ModalLead() {
       type: "cliente_potencial"
     }
   });
+
   const { RegisterLead } = useLead()
 
   const opportunities = watch("opportunities") || {};
   const allChecked = Object.values(opportunities).every(Boolean);
-
   const handleAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setValue("opportunities.honorarios_sucumbenciais", isChecked);
@@ -39,11 +43,12 @@ export default function ModalLead() {
 
   const handleRegisterLead = (data: LeadFormData) => {
     RegisterLead(data);
+    onClose();
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit(handleRegisterLead)} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg flex flex-col gap-5">
+      <form onSubmit={handleSubmit(handleRegisterLead)} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg flex flex-col gap-5 overflow-y-auto"> 
         <h1 className="text-gray-800 font-semibold text-2xl">Novo Lead</h1>
         <h2 className="text-gray-800">Dados do Lead</h2>
 
@@ -109,7 +114,7 @@ export default function ModalLead() {
         </div>
 
         <div className="flex gap-4 justify-end mt-4">
-          <Button type="reset" variant="outline" text="Cancelar"/>
+          <Button type="reset" variant="outline" text="Cancelar" onClick={onClose}/>
           <Button type="submit" variant="blue" text="Salvar"/>
         </div>
       </form>
