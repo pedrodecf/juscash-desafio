@@ -1,8 +1,13 @@
+"use client"
+
 import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { LeadFormData } from '../utils/leadValidation';
 import { toast } from 'sonner';
 import { useLead } from '../hooks/useLead';
 import DroppableColumn from './DroppableColumn';
+import { useState } from 'react';
+import Modal from './UI/Modal';
+import LeadDetailsModal from './LeadDetailsModal';
 
 type LeadColumn = 'cliente_potencial' | 'dados_confirmados' | 'analise_de_lead';
 
@@ -14,6 +19,8 @@ const columns: { id: LeadColumn; title: string }[] = [
 
 export default function LeadTable() {
   const { leads, updateLeads } = useLead();
+  const [selectedLead, setSelectedLead] = useState<LeadFormData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -32,6 +39,16 @@ export default function LeadTable() {
   leads.forEach((lead) => {
     groupedLeads[lead.type].push(lead);
   });
+
+  const handleOpenLeadInfo = (lead: LeadFormData) => {
+    setSelectedLead(lead);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedLead(null);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -79,12 +96,20 @@ export default function LeadTable() {
   };
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-3">
-        {columns.map((column) => (
-          <DroppableColumn key={column.id} id={column.id} title={column.title} leads={groupedLeads[column.id]} />
-        ))}
-      </div>
-    </DndContext>
+    <>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <div className="grid grid-cols-3">
+          {columns.map((column) => (
+            <DroppableColumn key={column.id} id={column.id} title={column.title} leads={groupedLeads[column.id]} onOpenLeadInfo={handleOpenLeadInfo} />
+          ))}
+        </div>
+      </DndContext>
+
+      {selectedLead && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <LeadDetailsModal lead={selectedLead} onClose={closeModal} />
+        </Modal>
+      )}
+    </>
   );
 }

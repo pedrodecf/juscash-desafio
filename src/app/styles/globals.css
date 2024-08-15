@@ -69,3 +69,9 @@ body {
   padding-right: 0.10rem;
   line-height: 1.25rem;
 }
+
+.custom-checkbox:disabled {
+  background-color: #c4c4c4;
+  border-color: #a7a7a7;
+  cursor: not-allowed;
+}
