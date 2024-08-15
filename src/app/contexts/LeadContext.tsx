@@ -8,6 +8,7 @@ interface LeadContextType {
   leads: LeadFormData[];
   RegisterLead: (data: LeadFormData) => void;
   updateLeads: (updatedLeads: LeadFormData[]) => void;
+  removeLead: (email: string) => void;
 }
 
 export const LeadContext = createContext<LeadContextType>({} as LeadContextType);
@@ -49,8 +50,14 @@ export function LeadProvider({ children }: LeadProviderProps) {
     localStorage.setItem('@juscash:pedrodecf-leads', JSON.stringify(updatedLeads));
   }
 
+  function removeLead(email: string) {
+    const leads = JSON.parse(localStorage.getItem('@juscash:pedrodecf-leads') || '[]');
+    const updatedLeads = leads.filter((lead: LeadFormData) => lead.email !== email);
+    updateLeads(updatedLeads);
+  }
+
   return (
-    <LeadContext.Provider value={{ leads: leadsData, RegisterLead, updateLeads }}>
+    <LeadContext.Provider value={{ leads: leadsData, RegisterLead, updateLeads, removeLead }}>
       {children}
     </LeadContext.Provider>
   );

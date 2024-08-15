@@ -1,7 +1,13 @@
+"use client"
+
+import { useState } from "react";
 import { LeadFormData } from "../utils/leadValidation";
 import Button from "./UI/Button";
 import Checkbox from "./UI/Checkbox";
 import Input from "./UI/Input";
+import Alert from "./UI/Alert";
+import { useLead } from "../hooks/useLead";
+import { toast } from "sonner";
 
 interface LeadDetailsModalProps {
   lead: LeadFormData;
@@ -9,6 +15,24 @@ interface LeadDetailsModalProps {
 }
 
 export default function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProps) {
+  const { removeLead } = useLead()
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  const handleConfirm = () => {
+    removeLead(lead.email);
+    setIsAlertOpen(false);
+    toast('Lead excluído com sucesso', {
+      description: 'A lista foi atualizada',
+      action: { label: 'Fechar', onClick: () => {} }
+    })
+    onClose();
+  };
+
+  const handleCancel = () => {
+    setIsAlertOpen(false);
+  };
+
   return (
     <>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg flex flex-col gap-5 overflow-y-auto">
@@ -70,9 +94,19 @@ export default function LeadDetailsModal({ lead, onClose }: LeadDetailsModalProp
         </div>
 
         <div className="flex gap-4 justify-end mt-4">
+          <Button type="button" variant="outline" text="Excluir" onClick={() => setIsAlertOpen(true)} />
           <Button type="button" variant="blue" text="Fechar" onClick={onClose} />
         </div>
       </div>
+
+      {isAlertOpen && (
+        <Alert
+          title="Confirmação"
+          message="Tem certeza de que deseja realizar esta ação?"
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
     </>
   );
 }
