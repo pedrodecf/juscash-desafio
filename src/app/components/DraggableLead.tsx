@@ -33,7 +33,7 @@ export default function DraggableLead({ id, text, onClick }: DraggableLeadProps)
       onMouseMove={() => setDragging(true)}
       onMouseUp={() => setDragging(false)}
     >
-      <p className="line-clamp-1 w-fit h-fit hover:underline cursor-default z-50" onClick={handleClick}>{text}</p>
+      <p className="w-fit max-w-full overflow-hidden text-ellipsis whitespace-nowrap hover:underline cursor-default z-50" onClick={handleClick}>{text}</p>
     </div>
   );
 }

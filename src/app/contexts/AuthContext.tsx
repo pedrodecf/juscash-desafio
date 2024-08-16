@@ -23,13 +23,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const userJson = localStorage.getItem('@juscash:pedrodecf-userLogged');
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      setUserLogged({
-        email: user.email,
-        password: user.password,
-      });
+    if (!userJson) {
+      document.cookie = "userLogged=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      return;
     }    
+
+    const user = JSON.parse(userJson);
+    setUserLogged({
+      email: user.email,
+      password: user.password,
+    });
+
+    document.cookie = "userLogged=true; path=/";
   }, [])
 
   function Register(data: SignupFormData) {
@@ -82,12 +87,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       password: user.password,
     });
 
+    document.cookie = "userLogged=true; path=/";
+    
     return true;
   }
 
   function Logout() {
     localStorage.removeItem('@juscash:pedrodecf-userLogged');
     setUserLogged(null);
+    document.cookie = "userLogged=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
   }
 
   return (
